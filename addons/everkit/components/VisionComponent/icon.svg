@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg version="1.1" width="1024" height="1024" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+<rect x="32" y="64" width="288" height="64" fill="#639BFF" />
+<rect x="704" y="64" width="288" height="64" fill="#639BFF" />
+<rect x="32" y="128" width="64" height="224" fill="#639BFF" />
+<rect x="928" y="128" width="64" height="224" fill="#639BFF" />
+<rect x="416" y="288" width="192" height="64" fill="#639BFF" />
+<rect x="320" y="320" width="96" height="64" fill="#639BFF" />
+<rect x="608" y="320" width="96" height="64" fill="#639BFF" />
+<rect x="288" y="352" width="32" height="64" fill="#639BFF" />
+<rect x="704" y="352" width="32" height="64" fill="#639BFF" />
+<rect x="256" y="384" width="32" height="64" fill="#639BFF" />
+<rect x="448" y="384" width="128" height="32" fill="#639BFF" />
+<rect x="736" y="384" width="32" height="64" fill="#639BFF" />
+<rect x="224" y="416" width="32" height="192" fill="#639BFF" />
+<rect x="416" y="416" width="32" height="32" fill="#639BFF" />
+<rect x="576" y="416" width="32" height="32" fill="#639BFF" />
+<rect x="768" y="416" width="32" height="192" fill="#639BFF" />
+<rect x="192" y="448" width="32" height="128" fill="#639BFF" />
+<rect x="384" y="448" width="32" height="128" fill="#639BFF" />
+<rect x="480" y="448" width="64" height="128" fill="#639BFF" />
+<rect x="608" y="448" width="32" height="128" fill="#639BFF" />
+<rect x="800" y="448" width="32" height="128" fill="#639BFF" />
+<rect x="448" y="480" width="32" height="64" fill="#639BFF" />
+<rect x="544" y="480" width="32" height="64" fill="#639BFF" />
+<rect x="256" y="576" width="32" height="64" fill="#639BFF" />
+<rect x="416" y="576" width="32" height="32" fill="#639BFF" />
+<rect x="576" y="576" width="32" height="32" fill="#639BFF" />
+<rect x="736" y="576" width="32" height="64" fill="#639BFF" />
+<rect x="288" y="608" width="32" height="64" fill="#639BFF" />
+<rect x="448" y="608" width="128" height="32" fill="#639BFF" />
+<rect x="704" y="608" width="32" height="64" fill="#639BFF" />
+<rect x="320" y="640" width="96" height="64" fill="#639BFF" />
+<rect x="608" y="640" width="96" height="64" fill="#639BFF" />
+<rect x="32" y="672" width="64" height="288" fill="#639BFF" />
+<rect x="416" y="672" width="192" height="64" fill="#639BFF" />
+<rect x="928" y="672" width="64" height="288" fill="#639BFF" />
+<rect x="96" y="896" width="224" height="64" fill="#639BFF" />
+<rect x="704" y="896" width="224" height="64" fill="#639BFF" />
+</svg>
