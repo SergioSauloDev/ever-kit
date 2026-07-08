@@ -14,6 +14,6 @@ A modular gameplay framework for Godot 4.
 2. Copy folder into addons/
 3. Enable plugin
 
-## Descargar
+## Download
 
-[⬇️ Descargar EverKit v1.0.0](https://github.com/SergioSaulo-design/EverKit/releases/latest)
+[⬇️ Download EverKit latest]([https://github.com/SergioSaulo-design/EverKit/releases/latest](https://github.com/SergioSaulo-design/ever-kit/releases/latest))
