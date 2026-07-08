@@ -2,13 +2,13 @@
 
 A modular gameplay framework for Godot 4.
 
-# Features:
+**Features**:
 ✓ Health System
 ✓ Combat System
 ✓ AI Vision System
 ✓ Reusable Components
 
-# Installation
+**Installation**
 
 1. Download addon
 2. Copy folder into addons/
