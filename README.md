@@ -16,4 +16,4 @@ A modular gameplay framework for Godot 4.
 
 ## Download
 
-[⬇️ Download EverKit latest]([https://github.com/SergioSaulo-design/EverKit/releases/latest](https://github.com/SergioSaulo-design/ever-kit/releases/latest))
+[⬇️ Download_EverKit_latest]([https://github.com/SergioSaulo-design/EverKit/releases/latest](https://github.com/SergioSaulo-design/ever-kit/releases/latest))
