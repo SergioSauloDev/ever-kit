@@ -31,10 +31,10 @@
 class_name VisionComponent extends Node2D
 ## Vision cone angle in degrees.
 ##
-## The value is clamped between 30 and 180 degrees.
+## The value is clamped between 10 and 360 degrees.
 @export_range(30.0, 180.0) var angle: float = 90.0:
 	set(value):
-		angle = clampf(value, 30.0, 180.0)
+		angle = clampf(value, 10.0, 360.0)
 		queue_redraw()
 		update_cone()
 

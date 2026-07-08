@@ -186,6 +186,10 @@ func revive() -> void:
 	is_dead = false
 	current_health = max_health
 
+## Reset the [member current_health] to [member max_health], see also [method reset_health]
+func reset_to_max_health() -> void:
+	current_health = max_health
+
 ## Sets the current health directly.
 ##
 ## The value is automatically clamped between
