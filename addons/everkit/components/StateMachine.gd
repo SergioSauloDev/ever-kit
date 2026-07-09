@@ -10,7 +10,10 @@ var current_state: StateBase = null
 var states: Dictionary[StringName, StateBase]
 
 func _ready() -> void:
-	assert(default_state != null, "StateMachine" + controlled_node.name + "Default State is null")
+	assert(
+    default_state != null,
+    "StateMachine '" + controlled_node.name + "' Default State is null."
+)
 
 	for child in get_children():
     	_child_entered(child)
@@ -50,10 +53,12 @@ func change_state_to(new_state: StringName) -> void:
 		current_state = states[new_state]
 		state_start()
 	else:
-		push_error("State Machine ", controlled_node.name,
-		" new_state is not states")
-		assert(false, "State Machine "
-		+ controlled_node.name + " State '%s' not found.")
+		push_error("StateMachine '" + controlled_node.name +
+    	"' State '" + str(new_state) + "' not found.")
+		assert(
+    	false,
+    	"StateMachine '" + controlled_node.name +
+    	"' State '" + str(new_state) + "' not found.")
 
 #region METODOS AUTOMÁTICOS
 func _process(delta: float) -> void:
