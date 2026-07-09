@@ -11,7 +11,7 @@ var states: Dictionary[StringName, StateBase]
 
 func _ready() -> void:
 	child_entered_tree.connect(_child_entered)
-	call_deferred("state_default_start")
+	call_deferred("default_state_start")
 
 func _child_entered(node: Node) -> void:
 	if not node is StateBase:
