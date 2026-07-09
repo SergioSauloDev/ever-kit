@@ -1,5 +1,5 @@
 @tool
-@icon("res://addons/everkit/components/HurtboxComponent/icon.svg")
+@icon("res://addons/everkit/icons/hurtbox.svg")
 class_name HurtboxComponent extends Area2D
 
 ## A component responsible for receiving incoming hits and forwarding

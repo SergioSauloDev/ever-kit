@@ -17,7 +17,7 @@
 ##     print("Still alive!")
 ## [/codeblock]
 @tool
-@icon("res://addons/everkit/components/HealthComponent/icon.svg")
+@icon("res://addons/everkit/icons/health.svg")
 class_name HealthComponent extends Node
 
 ## The maximum amount of health this component can have.

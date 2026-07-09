@@ -27,7 +27,7 @@
 ## 	print("Target lost: ", target.name)
 ## [/codeblock]
 @tool
-@icon("res://addons/everkit/components/VisionComponent/icon.svg")
+@icon("res://addons/everkit/icons/vision.svg")
 class_name VisionComponent extends Node2D
 ## Vision cone angle in degrees.
 ##
