@@ -1,109 +1,569 @@
 # HealthComponent
 
-The `HealthComponent` is a reusable Godot Node script that manages an entity’s health. It provides a simple API for taking damage, healing, killing, and reviving a game object, without depending on any visuals or game logic. This makes it suitable for players, enemies, NPCs, destructible objects, and other gameplay elements. For example, the Godot Essentials documentation notes that such a component “handles all aspects related to taking damage and managing health on the parent node”, and the `HealthComponent` class here follows that pattern.
+A reusable health system for Godot 4.
 
-Example usage:
+`HealthComponent` is a lightweight and modular component that manages an entity's health independently from gameplay logic, animations, or visuals. It provides an easy-to-use API for applying damage, healing, killing, reviving, and monitoring an entity's life state.
+
+Because it inherits from `Node`, it can be attached to any scene without affecting its hierarchy or physics.
+
+---
+
+# Features
+
+- ❤️ Configurable maximum health.
+- 💥 Damage and healing support.
+- ☠️ Death and revive system.
+- 🛡️ Invulnerability mode.
+- ♾️ Infinite health mode.
+- 🔄 Reset to initial or maximum health.
+- 📊 Health percentage calculation.
+- 📡 Built-in signals for health changes.
+- 🧩 Completely reusable and independent from gameplay logic.
+- 👤 Suitable for players, enemies, NPCs, bosses, and destructible objects.
+
+---
+
+# Scene Setup
+
+Simply add a **HealthComponent** as a child of any node that needs health.
+
+Example:
+
+```text
+Player
+├── Sprite2D
+├── CollisionShape2D
+└── HealthComponent
+```
+
+Or:
+
+```text
+Enemy
+├── AnimatedSprite2D
+├── HitboxComponent
+├── HurtboxComponent
+└── HealthComponent
+```
+
+The component automatically initializes itself when the scene starts.
+
+---
+
+# Inspector Properties
+
+## Max Health
+
 ```gdscript
-var health = HealthComponent.new()
-# Attach the component to the scene or parent node before using it
-add_child(health)
+@export_range(10.0, 200)
+var max_health := 60.0
+```
 
-health.apply_damage(25)  # Subtract 25 health
-health.heal(10)          # Add 10 health
+Defines the maximum amount of health.
 
+Changing this value automatically clamps the current health.
+
+Default:
+
+```
+60
+```
+
+---
+
+## Start Full Health
+
+```gdscript
+@export
+var start_full_health := true
+```
+
+If enabled, the component starts with full health.
+
+Otherwise, it starts with the value stored in **Start Health**.
+
+Default:
+
+```
+true
+```
+
+---
+
+## Start Health
+
+```gdscript
+@export
+var start_health
+```
+
+Initial health when **Start Full Health** is disabled.
+
+Example:
+
+```
+Max Health = 100
+
+Start Full Health = false
+
+Start Health = 40
+```
+
+The entity begins with **40 HP**.
+
+---
+
+## Can Heal
+
+```gdscript
+@export
+var can_heal := true
+```
+
+Determines whether healing is allowed.
+
+If disabled, every call to `heal()` is ignored.
+
+---
+
+## Invulnerable
+
+```gdscript
+@export
+var invulnerable := false
+```
+
+When enabled, damage is ignored.
+
+Healing still works normally.
+
+---
+
+## Infinite Health
+
+```gdscript
+@export
+var infinite_health := false
+```
+
+Makes the entity immune to all damage.
+
+Unlike **Invulnerable**, this mode also hides the **Max Health** property since health becomes irrelevant.
+
+---
+
+# Runtime Properties
+
+## Current Health
+
+```gdscript
+current_health
+```
+
+Stores the current health.
+
+The value is always clamped between:
+
+```
+0 <= current_health <= max_health
+```
+
+---
+
+## Is Dead
+
+```gdscript
+is_dead
+```
+
+Returns whether the entity is dead.
+
+This value updates automatically whenever the health changes.
+
+---
+
+# Signals
+
+## health_changed
+
+```gdscript
+signal health_changed(current_health, max_health)
+```
+
+Emitted every time the health changes.
+
+Example:
+
+```gdscript
+health.health_changed.connect(_on_health_changed)
+
+func _on_health_changed(current, maximum):
+    health_bar.value = current / maximum
+```
+
+---
+
+## damaged
+
+```gdscript
+signal damaged(amount)
+```
+
+Emitted after taking damage.
+
+Example:
+
+```gdscript
+health.damaged.connect(_on_damaged)
+
+func _on_damaged(amount):
+    print("Received", amount, "damage")
+```
+
+---
+
+## healed
+
+```gdscript
+signal healed(amount)
+```
+
+Emitted after restoring health.
+
+Example:
+
+```gdscript
+health.healed.connect(_on_healed)
+
+func _on_healed(amount):
+    print("Recovered", amount, "HP")
+```
+
+---
+
+## dead
+
+```gdscript
+signal dead
+```
+
+Emitted when health reaches zero.
+
+Example:
+
+```gdscript
+health.dead.connect(_on_dead)
+
+func _on_dead():
+    queue_free()
+```
+
+---
+
+## revived
+
+```gdscript
+signal revived
+```
+
+Emitted when the entity comes back to life.
+
+Example:
+
+```gdscript
+health.revived.connect(_on_revived)
+```
+
+---
+
+# Methods
+
+## apply_damage()
+
+```gdscript
+apply_damage(amount)
+```
+
+Applies damage to the entity.
+
+Damage is ignored if:
+
+- the entity is already dead
+- Invulnerable is enabled
+- Infinite Health is enabled
+
+Example:
+
+```gdscript
+health.apply_damage(20)
+```
+
+---
+
+## heal()
+
+```gdscript
+heal(amount)
+```
+
+Restores health.
+
+Healing is ignored if:
+
+- the entity is dead
+- Can Heal is disabled
+
+Example:
+
+```gdscript
+health.heal(15)
+```
+
+---
+
+## kill()
+
+```gdscript
+kill()
+```
+
+Immediately kills the entity.
+
+Equivalent to setting the current health to zero.
+
+Example:
+
+```gdscript
+health.kill()
+```
+
+---
+
+## revive()
+
+```gdscript
+revive()
+```
+
+Revives the entity and restores its health to the maximum value.
+
+Example:
+
+```gdscript
+health.revive()
+```
+
+---
+
+## reset_health()
+
+```gdscript
+reset_health()
+```
+
+Restores the initial health.
+
+If **Start Full Health** is enabled:
+
+```
+Current Health = Max Health
+```
+
+Otherwise:
+
+```
+Current Health = Start Health
+```
+
+Example:
+
+```gdscript
+health.reset_health()
+```
+
+---
+
+## reset_to_max_health()
+
+```gdscript
+reset_to_max_health()
+```
+
+Fully restores the entity.
+
+Example:
+
+```gdscript
+health.reset_to_max_health()
+```
+
+---
+
+## set_health()
+
+```gdscript
+set_health(value)
+```
+
+Directly changes the health.
+
+The value is automatically clamped.
+
+Example:
+
+```gdscript
+health.set_health(50)
+```
+
+---
+
+## get_health_percent()
+
+```gdscript
+get_health_percent()
+```
+
+Returns a value between **0.0** and **1.0**.
+
+Example:
+
+```gdscript
+var percent = health.get_health_percent()
+```
+
+Can be used for UI:
+
+```gdscript
+health_bar.value = health.get_health_percent()
+```
+
+---
+
+## is_alive()
+
+```gdscript
+is_alive()
+```
+
+Returns whether the entity is alive.
+
+Example:
+
+```gdscript
 if health.is_alive():
     print("Still alive!")
-else:
-    print("Entity died.")
 ```
 
-## Adding to a Node
-The `HealthComponent` script uses `@class_name`, so it appears as a node type ("HealthComponent") in the Godot editor. To use it, open the **Create New Node** dialog, search for "health", and add a **HealthComponent** node as a child of your game object (e.g. a player or enemy node). Once added, configure its exported properties (shown in the Inspector) such as **Max Health**, **Start Health**, etc. The component will then manage the parent node’s health according to these settings when the scene runs.
+---
 
-## Properties
-- `max_health` (float, default `60.0`): The maximum health value. This property is exported with a range of 10.0 to 200. Changing `max_health` automatically clamps the current health to the new maximum (unless `infinite_health` is enabled) and emits the `health_changed` signal.
-- `current_health` (float): The current health value, automatically kept between 0 and `max_health`. Setting `current_health` updates the `is_dead` state and emits the `health_changed(current_health, max_health)` signal.
-- `start_full_health` (bool, default `true`): If `true`, the component starts with full health (`max_health`) when the scene is ready. If `false`, it starts with the value of `start_health`.
-- `start_health` (float, default `0.0`): The initial health used when `start_full_health` is disabled. This value is clamped between 0 and `max_health`.
-- `can_heal` (bool, default `true`): If `false`, the component cannot be healed (`heal()` calls have no effect).
-- `invulnerable` (bool, default `false`): If `true`, the component ignores incoming damage (`apply_damage()` does nothing while invulnerable).
-- `infinite_health` (bool, default `false`): If `true`, the component ignores all incoming damage and cannot be killed. In this mode, `max_health` becomes non-editable in the Inspector.
-- `is_dead` (bool, read-only): `true` if `current_health <= 0`. Changing from `false` to `true` emits the `dead` signal; changing from `true` to `false` emits the `revived` signal. Use the method `is_alive()` to check this state.
+# Basic Example
 
-## Methods
-- `reset_health()`: Restores health to the initial starting value. If `start_full_health` is `true`, sets `current_health = max_health`; otherwise sets `current_health = start_health`.
-- `heal(amount: float)`: Increases health by the given amount. If the component is dead (`is_dead == true`) or `can_heal` is `false`, this does nothing. After adding health, it emits `healed(amount)` with the actual healed amount.
-- `get_health_percent() -> float`: Returns the current health ratio `current_health / max_health`, as a value from 0.0 (0%) to 1.0 (100%).
-- `is_alive() -> bool`: Returns `true` if the entity is not dead (i.e. `is_dead == false`).
-- `kill()`: Instantly kills the component by setting `current_health = 0` and `is_dead = true`. If `infinite_health` is enabled, `kill()` has no effect.
-- `revive()`: If the component is currently dead, this restores it to full health (`current_health = max_health`) and clears the dead state (`is_dead = false`), emitting `revived`.
-- `reset_to_max_health()`: Shortcut to set `current_health = max_health`.
-- `set_health(value: float)`: Directly sets `current_health` to `value` (clamped between 0 and `max_health`) and updates the dead state.
-- `apply_damage(amount: float)`: Subtracts the given damage from `current_health`. Does nothing if the component is already dead, `invulnerable`, or `infinite_health` is `true`. After applying damage, it emits `damaged(amount)` with the actual damage received (clamped if necessary).
-
-## Signals
-- `health_changed(current_health: float, max_health: float)`: Emitted whenever the current health value changes (due to damage or healing). Provides the new current and max health.
-- `damaged(amount: float)`: Emitted right after damage is applied. Parameter `amount` is the actual damage subtracted.
-- `healed(amount: float)`: Emitted right after healing is applied. Parameter `amount` is the actual health restored.
-- `dead`: Emitted when the component’s health drops to zero (entity dies).
-- `revived`: Emitted when the entity is revived from death.
-
-## Examples
-
-**Basic Usage:** Create and attach a HealthComponent to a node, then apply damage and healing.
 ```gdscript
-var health = HealthComponent.new()
-add_child(health)  # ensure component is part of the scene
+@onready var health: HealthComponent = $HealthComponent
 
-health.max_health = 100
-health.start_full_health = false
-health.start_health = 50
-health.reset_health()  # sets current_health to 50
+func _ready():
+    health.dead.connect(_on_dead)
+    health.health_changed.connect(_on_health_changed)
 
-health.apply_damage(20)  # health goes to 30
-health.heal(10)          # health goes to 40
+func _on_dead():
+    print("Game Over")
+
+func _on_health_changed(current, maximum):
+    print(current, "/", maximum)
 ```
 
-**Death and Revival:** Damage that reduces health to 0 triggers the `dead` signal.
+---
+
+# Enemy Example
+
 ```gdscript
-health.apply_damage(1000)  # health is now 0 (dead)
-if not health.is_alive():
-    print("Entity has died.")
+func _on_hit(damage):
+    health.apply_damage(damage)
 
-health.revive()  # entity is revived at full health
+func _on_dead():
+    animation_player.play("death")
 ```
 
-**Using Flags:** Demonstrate `invulnerable` and `infinite_health`.
+---
+
+# Healing Item Example
+
 ```gdscript
-health.invulnerable = true
-health.apply_damage(50)   # health unchanged while invulnerable
-health.invulnerable = false
-
-health.infinite_health = true
-health.apply_damage(100)  # still unchanged, cannot be killed
-health.kill()             # does nothing
+func use_potion():
+    player_health.heal(25)
 ```
 
-**Connecting Signals:** Listen to health events to update game UI or logic.
+---
+
+# Boss Example
+
+```gdscript
+func _process(delta):
+    boss_bar.value = boss_health.get_health_percent()
+```
+
+---
+
+# Respawn Example
+
+```gdscript
+func respawn():
+    health.revive()
+    global_position = spawn_position
+```
+
+---
+
+# Destructible Object Example
+
+```gdscript
+func _on_dead():
+    spawn_loot()
+    queue_free()
+```
+
+---
+
+# Health Bar Example
+
 ```gdscript
 func _ready():
-    health.connect("health_changed", self, "_on_health_changed")
-    health.connect("dead", self, "_on_entity_dead")
+    health.health_changed.connect(update_health_bar)
 
-func _on_health_changed(current, max):
-    print("Health changed to %d/%d" % [current, max])
-
-func _on_entity_dead():
-    print("Entity is dead!")
+func update_health_bar(current, maximum):
+    progress_bar.value = current / maximum * 100
 ```
 
-**Health Percentage for UI:** Use `get_health_percent()` to update a progress bar.
-```gdscript
-# Example: updating a health bar's value (0 to 100)
-$HealthBar.max_value = 100
-$HealthBar.value = health.get_health_percent() * 100
-```
+---
 
-With these APIs and examples, you can fully integrate the `HealthComponent` into your Godot project to manage entity health in a flexible way.
+# Best Practices
 
-**Sources:** Godot Essentials: Health Component documentation. (Implementation based on the provided `HealthComponent.gd` script.)
+- Keep gameplay logic outside of the component.
+- Connect to signals instead of modifying the component internally.
+- Pair it with `HitboxComponent` and `HurtboxComponent` for a complete combat system.
+- Use `get_health_percent()` for UI instead of calculating the percentage yourself.
+- Avoid modifying `current_health` directly unless absolutely necessary.
+
+---
+
+# Common Use Cases
+
+- Player health
+- Enemy health
+- Bosses
+- NPCs
+- Breakable objects
+- Survival mechanics
+- RPG characters
+- Roguelike entities
+- Tower defense units
+
+---
+
+# Notes
+
+- The component automatically clamps every health value.
+- Health can never become negative.
+- Health can never exceed the maximum.
+- Signals are emitted automatically whenever the health changes.
+- The component contains no gameplay-specific logic, making it fully reusable across different projects.
