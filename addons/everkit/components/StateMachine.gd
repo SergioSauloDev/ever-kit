@@ -58,6 +58,14 @@ var states: Dictionary[StringName, StateBase]
 signal changed_state(old_state: StateBase, new_state: StateBase)
 
 func _ready() -> void:
+	if Engine.is_editor_hint():
+		set_process(false)
+		set_physics_process(false)
+		set_process_input(false)
+		set_process_unhandled_input(false)
+		set_process_unhandled_key_input(false)
+		return
+
 	assert(
 		default_state != null,
 		"StateMachine '" + controlled_node.name + "' Default State is null."
@@ -247,10 +255,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 ## Displays configuration warnings in the editor.
 ##
 ## Warns when no default state has been assigned.
-func _get_accessibility_configuration_warnings() -> PackedStringArray:
+func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 
-	if default_state == null:
+	if not is_instance_valid(default_state):
 		warnings.append("The Default State is not assigned.")
 
 	return warnings
