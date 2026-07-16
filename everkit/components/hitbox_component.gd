@@ -103,12 +103,6 @@ class_name HitboxComponent extends Area2D
 ## [/codeblock]
 @export var hit_once_per_overlap: bool = true
 
-## Reserved for future combat systems.
-##
-## This value may be used for repeated attacks or timed damage
-## in future versions of EverKit.
-@export_range(0.1, 1) var hit_time: float = 0.15
-
 ## Node considered as the attacker.
 ##
 ## If left empty, the parent node is automatically assigned

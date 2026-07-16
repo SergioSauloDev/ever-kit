@@ -1,3 +1,5 @@
+[**Return to index**](https://github.com/SergioSaulo-design/ever-kit/blob/ced991d1188887c166077242fcc9fd39755f5cc8/everkit/documentation/index.md)
+
 # VisionComponent
 
 VisionComponent is a Godot `Node2D` that provides a configurable vision cone to detect targets (e.g. player or other NPCs) within range and line of sight. It is ideal for AI entities like enemies, guards, or turrets that must “see” and track targets in 2D games. Under the hood it uses a **RayCast2D** to perform line-of-sight checks. When a target enters or leaves the cone (and is visible), the component emits `target_detected` or `target_lost` signals. VisionComponent supports single or multiple target modes, automatic tracking of the detected target, and optional debug visualization. 
