@@ -1,4 +1,4 @@
-[**Return too index**](ever-kit/everkit/documentation/index.md)
+[**Return to index**](everkit/documentation/index.md)
 
 # HealthComponent
 
