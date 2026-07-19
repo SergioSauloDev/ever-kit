@@ -16,13 +16,11 @@ A modular gameplay framework for Godot 4.
 
 ## Download the latest version:
 
-[⬇️ Download EverKit](https://github.com/SergioSaulo-design/ever-kit/releases/latest)
+[⬇️ Download EverKit](https://github.com/SergioSauloDev/ever-kit/releases/latest)
 
 ⭐ If you like EverKit, please consider giving the repository a star on GitHub!
 
-## Documentation
-
-[Documentation](https://github.com/SergioSaulo-design/ever-kit/blob/758d8825707bbde3e96c3178e965ee339436740b/everkit/documentation/index.md)
+## [Documentation](https://github.com/SergioSauloDev/ever-kit/blob/758d8825707bbde3e96c3178e965ee339436740b/everkit/documentation/index.md)
 
 ## ❤️ Support EverKit
 
