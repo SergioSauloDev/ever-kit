@@ -154,14 +154,14 @@ func heal(amount: float) -> void:
 		healed.emit(healed_amount)
 
 ## Returns the current health percentage
-## as a value between [code]0.0[/code] and [code]1.0[/code].
+## as a value between [code]0.0[/code] and [code]100.0[/code].
 ##
 ## Example:
 ## [codeblock]
 ## var percent := health.get_health_percent()
 ## [/codeblock]
 func get_health_percent() -> float:
-	return current_health / max_health
+	return (current_health / max_health) * 100.0
 
 ## Returns [code]true[/code] if this component is alive.
 func is_alive() -> bool:
