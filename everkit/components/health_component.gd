@@ -117,8 +117,10 @@ signal revived
 ## Emitted when the component dies.
 signal dead
 
+
 func _ready() -> void:
 	reset_health()
+
 
 ## Restores the starting health.
 ##
@@ -130,6 +132,7 @@ func reset_health() -> void:
 		current_health = max_health
 	else:
 		current_health = start_health
+
 
 ## Restores health.
 ##
@@ -153,6 +156,7 @@ func heal(amount: float) -> void:
 	if healed_amount > 0:
 		healed.emit(healed_amount)
 
+
 ## Returns the current health percentage
 ## as a value between [code]0.0[/code] and [code]100.0[/code].
 ##
@@ -163,9 +167,11 @@ func heal(amount: float) -> void:
 func get_health_percent() -> float:
 	return (current_health / max_health) * 100.0
 
+
 ## Returns [code]true[/code] if this component is alive.
 func is_alive() -> bool:
 	return !is_dead
+
 
 ## Instantly kills the component.
 ##
@@ -177,6 +183,7 @@ func kill() -> void:
 	is_dead = true
 	current_health = 0
 
+
 ## Revives the component and restores
 ## its health to the maximum value.
 func revive() -> void:
@@ -186,9 +193,11 @@ func revive() -> void:
 	is_dead = false
 	current_health = max_health
 
+
 ## Reset the [member current_health] to [member max_health], see also [method reset_health]
 func reset_to_max_health() -> void:
 	current_health = max_health
+
 
 ## Sets the current health directly.
 ##
@@ -198,6 +207,7 @@ func set_health(value: float) -> void:
 	current_health = value
 
 	is_dead = current_health <= 0
+
 
 ## Applies damage to the component.
 ##
@@ -219,6 +229,7 @@ func apply_damage(damage: float) -> void:
 	var damage_amount := old_health - current_health
 
 	damaged.emit(damage_amount)
+
 
 func _validate_property(property: Dictionary) -> void:
 	if start_full_health:

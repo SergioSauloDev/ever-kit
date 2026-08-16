@@ -49,7 +49,8 @@ enum TargetMode {
 	## Searches and tracks one target from a group.
 	SINGLE,
 	## Searches multiple groups and selects the closest visible target.
-	MULTIPLE}
+	MULTIPLE,
+}
 
 ## Variable that defines the vision mode according
 ##to the [enum TargetMode] enum.
@@ -100,7 +101,8 @@ enum TargetMode {
 ## Defines the initial looking direction.
 @export var direction: Vector2 = Vector2.RIGHT:
 	set(value):
-		if value != Vector2.ZERO:direction = value.normalized()
+		if value != Vector2.ZERO:
+			direction = value.normalized()
 		original_direction = direction
 		queue_redraw()
 ## Original vision direction.
@@ -135,6 +137,7 @@ signal target_lost(target: Node2D)
 ## Indicates whether the current target is visible.
 var can_see_target: bool = false
 
+
 func _ready() -> void:
 	if target_mode == TargetMode.SINGLE and !target_group:
 		push_error("VisionComponent: target_group is null")
@@ -152,21 +155,23 @@ func _ready() -> void:
 	original_direction = direction.normalized()
 	initialize_target()
 
+
 ## Updates cached vision cone values.
 ##
 ## This should be called whenever the vision angle changes.
 func update_cone() -> void:
 	half_angle_rads = deg_to_rad(angle / 2.0)
 
+
 func _process(_delta: float) -> void:
 	if can_see_target and track_target and current_target:
-		direction = (
-			to_local(current_target.global_position).normalized())
+		direction = (to_local(current_target.global_position).normalized())
 	else:
 		direction = original_direction
 
 	if debug_mode and Engine.is_editor_hint():
 		queue_redraw()
+
 
 ## Returns configuration warnings displayed in the editor.
 ##
@@ -187,21 +192,21 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 	return warnings
 
+
 func _validate_property(property: Dictionary) -> void:
 	match target_mode:
 		TargetMode.SINGLE:
-
 			if property.name == "target_groups":
 				property.usage = PROPERTY_USAGE_NO_EDITOR
 
 		TargetMode.MULTIPLE:
-
 			if property.name == "target_group":
 				property.usage = PROPERTY_USAGE_NO_EDITOR
 
 	if !debug_mode:
 		if property.name == "debug_color":
 			property.usage = PROPERTY_USAGE_NO_EDITOR
+
 
 func _physics_process(_delta: float) -> void:
 	if Engine.get_physics_frames() % 2 != 0:
@@ -214,18 +219,12 @@ func _physics_process(_delta: float) -> void:
 		TargetMode.MULTIPLE:
 			update_multiple_targets()
 
+
 func _draw() -> void:
 	if debug_mode:
+		var left_direction := (direction.rotated(-half_angle_rads) * length)
 
-		var left_direction := (
-			direction.rotated(-half_angle_rads)
-			* length
-		)
-
-		var right_direction := (
-			direction.rotated(half_angle_rads)
-			* length
-		)
+		var right_direction := (direction.rotated(half_angle_rads) * length)
 
 		draw_line(Vector2.ZERO, left_direction, debug_color, 1)
 
@@ -233,11 +232,13 @@ func _draw() -> void:
 
 		var direction_angle := direction.angle()
 
-		draw_arc(Vector2.ZERO, length,
+		draw_arc(
+			Vector2.ZERO,
+			length,
 			direction_angle - half_angle_rads,
 			direction_angle + half_angle_rads,
 			16,
-			debug_color
+			debug_color,
 		)
 
 		draw_circle(Vector2.ZERO, 2.0, debug_color)
@@ -252,14 +253,9 @@ func _draw() -> void:
 ## 	print("Enemy is inside vision range")
 ## [/codeblock]
 func is_in_cone(node: Node2D) -> bool:
+	var target_local_position := to_local(node.global_position)
 
-	var target_local_position := to_local(
-		node.global_position
-	)
-
-	var angle_to_target := direction.angle_to(
-		target_local_position
-	)
+	var angle_to_target := direction.angle_to(target_local_position)
 
 	var distance := target_local_position.length()
 
@@ -267,6 +263,7 @@ func is_in_cone(node: Node2D) -> bool:
 		return false
 
 	return abs(angle_to_target) <= half_angle_rads
+
 
 ## Returns true if there is a clear line of sight
 ## between the component and the target.
@@ -277,10 +274,7 @@ func is_in_cone(node: Node2D) -> bool:
 ## 	print("No obstacles detected")
 ## [/codeblock]
 func has_line_of_sight(node: Node2D) -> bool:
-
-	ray_cast.target_position = (
-		ray_cast.to_local(node.global_position)
-	)
+	ray_cast.target_position = (ray_cast.to_local(node.global_position))
 
 	ray_cast.force_raycast_update()
 
@@ -289,13 +283,14 @@ func has_line_of_sight(node: Node2D) -> bool:
 
 	return ray_cast.get_collider() == node
 
+
 ## Returns true if the component can currently see the target.
 func can_see(node: Node2D) -> bool:
-
 	if !is_instance_valid(node):
 		return false
 
 	return (is_in_cone(node) and has_line_of_sight(node))
+
 
 ## Returns the current detected target.
 ##
@@ -305,6 +300,7 @@ func can_see(node: Node2D) -> bool:
 ## [/codeblock]
 func get_target() -> Node2D:
 	return current_target
+
 
 ## Returns every possible target from the configured groups.
 func get_targets() -> Array[Node2D]:
@@ -322,6 +318,7 @@ func get_targets() -> Array[Node2D]:
 
 	return targets
 
+
 ## Returns all targets currently visible.
 func get_visible_targets() -> Array[Node2D]:
 	var visibles: Array[Node2D] = []
@@ -332,14 +329,14 @@ func get_visible_targets() -> Array[Node2D]:
 
 	return visibles
 
+
 ## Returns the closest target from an array.
 func get_closest_visible_target(targets: Array[Node2D]) -> Node2D:
 	var closest: Node2D = null
 	var closest_distance := INF
 
 	for target in targets:
-		var distance := global_position.distance_to(
-			target.global_position)
+		var distance := global_position.distance_to(target.global_position)
 
 		if distance < closest_distance:
 			closest_distance = distance
@@ -347,34 +344,23 @@ func get_closest_visible_target(targets: Array[Node2D]) -> Node2D:
 
 	return closest
 
+
 ## Initializes the first target when the component starts.
 func initialize_target() -> void:
 	match target_mode:
-
 		TargetMode.SINGLE:
-
-			current_target = (
-				get_tree().
-				get_first_node_in_group(
-					target_group))
+			current_target = (get_tree().get_first_node_in_group(target_group))
 
 		TargetMode.MULTIPLE:
-
 			visible_targets = get_visible_targets()
 
-			current_target = (
-				get_closest_visible_target(
-					visible_targets))
+			current_target = (get_closest_visible_target(visible_targets))
+
 
 ## Updates detection state for SINGLE mode.
 func update_single_target() -> void:
-
 	if !is_instance_valid(current_target):
-
-		current_target = (
-			get_tree().
-			get_first_node_in_group(
-				target_group))
+		current_target = (get_tree().get_first_node_in_group(target_group))
 
 		return
 
@@ -391,6 +377,7 @@ func update_single_target() -> void:
 		can_see_target = false
 
 		target_lost.emit(current_target)
+
 
 ## Updates detection state for MULTIPLE mode.
 ##
@@ -410,6 +397,7 @@ func update_multiple_targets() -> void:
 
 	if current_target:
 		target_detected.emit(current_target)
+
 
 ## Returns true if a valid target exists.
 ##

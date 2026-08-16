@@ -155,6 +155,7 @@ signal damage_applied(hurtbox: HurtboxComponent, damage: float)
 ## invulnerability or parries.
 signal blocked(hurtbox: HurtboxComponent)
 
+
 ## Initializes the component.
 ##
 ## Connects internal signals and automatically assigns
@@ -169,6 +170,7 @@ func _ready() -> void:
 	if attacker == null:
 		attacker = get_parent()
 
+
 ## Enables the hitbox.
 ##
 ## This also enables collision monitoring.
@@ -181,6 +183,7 @@ func enable() -> void:
 	enabled = true
 	monitoring = true
 
+
 ## Disables the hitbox.
 ##
 ## This also disables collision monitoring.
@@ -192,6 +195,7 @@ func enable() -> void:
 func disable() -> void:
 	enabled = false
 	monitoring = false
+
 
 ## Returns whether the specified hurtbox can currently be hit.
 ##
@@ -212,7 +216,11 @@ func can_hit(hurtbox: HurtboxComponent) -> bool:
 	if hit_once_per_overlap and hurtbox in _hit_targets:
 		return false
 
+	if not overlaps_area(hurtbox):
+		return false
+
 	return true
+
 
 ## Clears every stored hurtbox.
 ##
@@ -225,6 +233,7 @@ func can_hit(hurtbox: HurtboxComponent) -> bool:
 ## [/codeblock]
 func clear_hit_targets() -> void:
 	_hit_targets.clear()
+
 
 ## Applies damage to the specified hurtbox.
 ##
@@ -251,6 +260,7 @@ func apply_hit(hurtbox: HurtboxComponent) -> void:
 	hit.emit(hurtbox)
 	damage_applied.emit(hurtbox, damage)
 
+
 ## Called whenever an area exits this hitbox.
 ##
 ## Removes the hurtbox from the internal cache so it
@@ -258,6 +268,7 @@ func apply_hit(hurtbox: HurtboxComponent) -> void:
 func _on_area_exited(area: Node2D) -> void:
 	if area is HurtboxComponent:
 		_hit_targets.erase(area)
+
 
 ## Called whenever an area enters this hitbox.
 ##

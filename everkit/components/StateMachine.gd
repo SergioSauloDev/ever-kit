@@ -57,6 +57,7 @@ var states: Dictionary[StringName, StateBase]
 ##     The newly activated state.
 signal changed_state(old_state: StateBase, new_state: StateBase)
 
+
 func _ready() -> void:
 	if Engine.is_editor_hint():
 		set_process(false)
@@ -68,12 +69,12 @@ func _ready() -> void:
 
 	assert(
 		default_state != null,
-		"StateMachine '" + controlled_node.name + "' Default State is null."
+		"StateMachine '" + controlled_node.name + "' Default State is null.",
 	)
 
 	assert(
 		default_state.get_parent() == self,
-		"Default State must be a child of this StateMachine."
+		"Default State must be a child of this StateMachine.",
 	)
 
 	# Register existing states.
@@ -85,6 +86,7 @@ func _ready() -> void:
 
 	# Start the default state after initialization.
 	call_deferred("default_state_start")
+
 
 ## Registers a new StateBase child.
 ##
@@ -99,6 +101,7 @@ func _child_entered(node: Node) -> void:
 
 		states[node.name] = node
 
+
 ## Removes a StateBase child from the state dictionary.
 ##
 ## This is called automatically when a StateBase exits the scene tree.
@@ -109,10 +112,12 @@ func _child_exited(node: Node) -> void:
 	if states.has(node.name):
 		states.erase(node.name)
 
+
 ## Starts the configured default state.
 func default_state_start() -> void:
 	current_state = default_state
 	state_start()
+
 
 ## Initializes the current state.
 ##
@@ -122,10 +127,10 @@ func state_start() -> void:
 		return
 
 	if OS.is_debug_build():
-		print("StateMachine ", controlled_node.name,
-		" start state ", current_state.name)
+		print("StateMachine ", controlled_node.name, " start state ", current_state.name)
 
 	current_state.start()
+
 
 ## Checks if a state exists.
 ##
@@ -137,6 +142,7 @@ func state_start() -> void:
 ## [/codeblock]
 func has_state(state_name: StringName) -> bool:
 	return states.has(state_name)
+
 
 ## Returns a state by its name.
 ##
@@ -153,6 +159,7 @@ func get_state(state_name: StringName) -> StateBase:
 
 	return states[state_name]
 
+
 ## Returns the name of the currently active state.
 ##
 ## Returns an empty StringName if no state is active.
@@ -165,6 +172,7 @@ func get_state(state_name: StringName) -> StateBase:
 ## [/codeblock]
 func get_current_state_name() -> StringName:
 	return current_state.name if current_state else &""
+
 
 ## Changes the current active state.
 ##
@@ -197,8 +205,7 @@ func change_state_to(new_state: StringName) -> void:
 	else:
 		assert(
 			false,
-			"StateMachine '" + controlled_node.name +
-			"' State '" + str(new_state) + "' not found."
+			"StateMachine '" + controlled_node.name + "' State '" + str(new_state) + "' not found.",
 		)
 
 #region AUTO METHODS
@@ -215,6 +222,7 @@ func _process(delta: float) -> void:
 	if current_state and current_state.has_method("on_process"):
 		current_state.on_process(delta)
 
+
 ## Sends the physics process callback to the current state.
 ##
 ## Any StateBase child can receive this callback:
@@ -226,6 +234,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if current_state and current_state.has_method("on_physics_process"):
 		current_state.on_physics_process(delta)
+
 
 ## Sends input events to the current state.
 ##
@@ -240,10 +249,12 @@ func _input(event: InputEvent) -> void:
 	if current_state and current_state.has_method("on_input"):
 		current_state.on_input(event)
 
+
 ## Sends unhandled input events to the current state.
 func _unhandled_input(event: InputEvent) -> void:
 	if current_state and current_state.has_method("on_unhandled_input"):
 		current_state.on_unhandled_input(event)
+
 
 ## Sends unhandled key input events to the current state.
 func _unhandled_key_input(event: InputEvent) -> void:

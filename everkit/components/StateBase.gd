@@ -12,10 +12,10 @@ class_name StateBase extends Node
 ## [codeblock]
 ## class_name IdleState
 ## extends StateBase
-## 
+##
 ## func start() -> void:
 ##     print("Entering Idle State")
-## 
+##
 ## func end() -> void:
 ##     print("Leaving Idle State")
 ## [/codeblock]
@@ -40,6 +40,7 @@ var controlled_node: Node
 ## Automatically assigned by the [StateMachine] when the state is registered.
 var state_machine: StateMachine
 
+
 ## Called when this state becomes active.
 ##
 ## Use this method to initialize behavior when entering the state.
@@ -52,6 +53,7 @@ var state_machine: StateMachine
 ## [/codeblock]
 func start() -> void:
 	pass
+
 
 ## Called when this state stops being active.
 ##
@@ -82,6 +84,7 @@ func end() -> void:
 func on_process(delta: float) -> void:
 	pass
 
+
 ## Called every physics frame while this state is active.
 ##
 ## This method is called automatically by the [StateMachine].
@@ -96,6 +99,7 @@ func on_process(delta: float) -> void:
 func on_physics_process(delta: float) -> void:
 	pass
 
+
 ## Called when an input event is received.
 ##
 ## Example:
@@ -108,6 +112,7 @@ func on_physics_process(delta: float) -> void:
 @warning_ignore("unused_parameter")
 func on_input(event: InputEvent) -> void:
 	pass
+
 
 ## Called when an unhandled input event is received.
 ##

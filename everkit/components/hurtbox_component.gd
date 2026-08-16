@@ -46,12 +46,14 @@ class_name HurtboxComponent extends Area2D
 ## • source: Node that caused the hit.
 signal hit_received(amount: float, source: Node)
 
+
 func _ready():
 	if Engine.is_editor_hint():
 		return
 
 	if not is_instance_valid(health_component):
 		push_warning("HurtboxComponent has no HealthComponent assigned.")
+
 
 ## Receives an incoming hit.
 ##
@@ -74,11 +76,13 @@ func receive_hit(amount: float, source: Node) -> void:
 	health_component.apply_damage(amount)
 	hit_received.emit(amount, source)
 
+
 ## Enables this Hurtbox.
 ##
 ## After calling this method, the Hurtbox can receive hits again.
 func enable() -> void:
 	enabled = true
+
 
 ## Disables this Hurtbox.
 ##
@@ -86,9 +90,11 @@ func enable() -> void:
 func disable() -> void:
 	enabled = false
 
+
 ## Returns whether this Hurtbox is currently able to receive hits.
 func _can_receive_hit() -> bool:
 	return enabled and monitoring
+
 
 ## Displays warnings inside the Godot editor when the component
 ## is not properly configured.
