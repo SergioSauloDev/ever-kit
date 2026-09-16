@@ -24,8 +24,7 @@ class_name HealthComponent extends Node
 ##
 ## Changing this value automatically clamps the current health
 ## so it never exceeds the new maximum.
-@export_range(10.0, 200)
-var max_health: float = 60.0:
+@export_range(10.0, 200) var max_health: float = 60.0:
 	set(value):
 		max_health = value
 
@@ -51,30 +50,25 @@ var current_health: float:
 ##
 ## Otherwise, it starts with the value defined by
 ## [member start_health].
-@export
-var start_full_health := true:
+@export var start_full_health := true:
 	set(value):
 		start_full_health = value
 		notify_property_list_changed()
 
 ## The initial health when [member start_full_health]
 ## is disabled.
-@export
-var start_health: float:
+@export var start_health: float:
 	set(value):
 		start_health = clamp(value, 0.0, max_health)
 
 ## Allows this component to receive healing.
-@export
-var can_heal := true
+@export var can_heal := true
 
 ## Prevents this component from receiving damage.
-@export
-var invulnerable := false
+@export var invulnerable := false
 
 ## If enabled, this component ignores all incoming damage.
-@export
-var infinite_health: bool:
+@export var infinite_health: bool:
 	set(value):
 		infinite_health = value
 		notify_property_list_changed()
