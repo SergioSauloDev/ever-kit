@@ -1,12 +1,12 @@
 @tool
-class_name MovmentComponent extends Node
+class_name MovementComponent extends Node
 
 var parent: Node2D
 
 
 func _ready() -> void:
 	parent = get_parent()
-	assert(get_parent().is_class("Node2D"), "MovmentComponent must be a child of a Node2D.")
+	assert(get_parent() is Node2D, "MovementComponent must be a child of a Node2D.")
 
 
 func move_to_position(target_position: Vector2, speed: float) -> void:
@@ -42,7 +42,7 @@ func move_to_target_with_offset(target: Node2D, offset: Vector2, speed: float) -
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
 
-	if not parent.is_class("Node2D"):
-		warnings.append("MovmentComponent must be a child of a Node2D.")
+	if not get_parent() is Node2D:
+		warnings.append("MovementComponent must be a child of a Node2D.")
 
 	return warnings
