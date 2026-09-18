@@ -9,14 +9,11 @@ func _ready() -> void:
 	assert(get_parent() is Node2D, "MovementComponent must be a child of a Node2D.")
 
 
-func move_to_position(target_position: Vector2, speed: float) -> void:
-	assert(speed > 0, "Speed must be greater than 0.")
-
-	var direction := (target_position - parent.position).normalized()
-	parent.position += direction * speed * get_process_delta_time()
-
-
-func move_to_position_with_offset(target_position: Vector2, offset: Vector2, speed: float) -> void:
+func move_to_position(
+	target_position: Vector2,
+	speed: float,
+	offset: Vector2 = Vector2(0.0, 0.0),
+) -> void:
 	assert(speed > 0, "Speed must be greater than 0.")
 
 	var adjusted_target := target_position + offset
@@ -24,14 +21,7 @@ func move_to_position_with_offset(target_position: Vector2, offset: Vector2, spe
 	parent.position += direction * speed * get_process_delta_time()
 
 
-func move_to_target(target: Node2D, speed: float) -> void:
-	assert(speed > 0, "Speed must be greater than 0.")
-
-	var direction := (target.position - parent.position).normalized()
-	parent.position += direction * speed * get_process_delta_time()
-
-
-func move_to_target_with_offset(target: Node2D, offset: Vector2, speed: float) -> void:
+func move_to_target(target: Node2D, speed: float, offset: Vector2 = Vector2(0.0, 0.0)) -> void:
 	assert(speed > 0, "Speed must be greater than 0.")
 
 	var adjusted_target := target.position + offset
