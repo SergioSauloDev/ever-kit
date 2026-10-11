@@ -31,6 +31,7 @@ class_name StateMachine extends Node
 ## Automatically assigned using the owner of this node.
 @onready var controlled_node: Node = self.owner
 
+@export var active_in_editor: bool = false
 ## The state that will be activated when the StateMachine starts.
 ##
 ## The assigned state must be a child of this StateMachine.
@@ -59,12 +60,7 @@ signal changed_state(old_state: StateBase, new_state: StateBase)
 
 
 func _ready() -> void:
-	if Engine.is_editor_hint():
-		set_process(false)
-		set_physics_process(false)
-		set_process_input(false)
-		set_process_unhandled_input(false)
-		set_process_unhandled_key_input(false)
+	if Engine.is_editor_hint() and !active_in_editor:
 		return
 
 	assert(
@@ -208,6 +204,7 @@ func change_state_to(new_state: StringName) -> void:
 			"StateMachine '" + controlled_node.name + "' State '" + str(new_state) + "' not found.",
 		)
 
+
 #region AUTO METHODS
 
 ## Sends the process callback to the current state.
@@ -219,6 +216,8 @@ func change_state_to(new_state: StringName) -> void:
 ##     update_animation()
 ## [/codeblock]
 func _process(delta: float) -> void:
+	if Engine.is_editor_hint() and !active_in_editor:
+		return
 	if current_state and current_state.has_method("on_process"):
 		current_state.on_process(delta)
 
@@ -232,6 +231,8 @@ func _process(delta: float) -> void:
 ##     controlled_node.move_and_slide()
 ## [/codeblock]
 func _physics_process(delta: float) -> void:
+	if Engine.is_editor_hint() and !active_in_editor:
+		return
 	if current_state and current_state.has_method("on_physics_process"):
 		current_state.on_physics_process(delta)
 
@@ -246,22 +247,29 @@ func _physics_process(delta: float) -> void:
 ##         state_machine.change_state_to("Attack")
 ## [/codeblock]
 func _input(event: InputEvent) -> void:
+	if Engine.is_editor_hint() and !active_in_editor:
+		return
 	if current_state and current_state.has_method("on_input"):
 		current_state.on_input(event)
 
 
 ## Sends unhandled input events to the current state.
 func _unhandled_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint() and !active_in_editor:
+		return
 	if current_state and current_state.has_method("on_unhandled_input"):
 		current_state.on_unhandled_input(event)
 
 
 ## Sends unhandled key input events to the current state.
 func _unhandled_key_input(event: InputEvent) -> void:
+	if Engine.is_editor_hint() and !active_in_editor:
+		return
 	if current_state and current_state.has_method("on_unhandled_key_input"):
 		current_state.on_unhandled_key_input(event)
 
 #endregion
+
 
 ## Displays configuration warnings in the editor.
 ##
